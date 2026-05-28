@@ -460,6 +460,86 @@
     font-size: 1.05rem;
   }
 
+  /* ===== OFERTA ===== */
+  .oferta-block {
+    display: none;
+    margin-top: 2rem;
+    background: rgba(232,255,71,0.04);
+    border: 1px solid rgba(232,255,71,0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .oferta-block.visible { display: block; }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .oferta-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,92,56,0.15);
+    border: 1px solid rgba(255,92,56,0.3);
+    border-radius: 100px;
+    padding: 4px 14px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .oferta-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .oferta-titulo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .oferta-titulo span { color: var(--brand); }
+  .oferta-desc { font-size: 0.9rem; color: var(--muted); margin-top: 0.4rem; line-height: 1.6; }
+  .oferta-preco { text-align: right; flex-shrink: 0; }
+  .preco-de { font-size: 0.85rem; color: var(--muted); text-decoration: line-through; }
+  .preco-por {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--brand);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .preco-label { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+  .btn-comprar {
+    display: block;
+    width: 100%;
+    background: var(--brand);
+    color: var(--dark);
+    border: none;
+    border-radius: 12px;
+    padding: 1.1rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  }
+  .btn-comprar:hover { background: var(--brand-dark); box-shadow: 0 0 24px rgba(232,255,71,0.2); }
+  .btn-comprar:active { transform: scale(0.99); }
+  .oferta-garantia { text-align: center; font-size: 0.78rem; color: var(--muted); margin-top: 0.85rem; }
+
+
   /* ===== TOAST ===== */
   .toast {
     position: fixed;
@@ -629,12 +709,50 @@
         <div class="value">Amanhã, 19h</div>
       </div>
     </div>
+    <div class="oferta-block" id="oferta-block">
+      <div class="oferta-top">
+        <div>
+          <div class="oferta-tag">🔥 Oferta exclusiva para quem assistiu ao vivo</div>
+          <div class="oferta-titulo">Acesse o curso<br><span>completo agora.</span></div>
+          <div class="oferta-desc">Tudo que você viu hoje mais muito mais conteúdo,<br>suporte e acesso vitalício.</div>
+        </div>
+        <div class="oferta-preco">
+          <div class="preco-de">R$ 497,00</div>
+          <div class="preco-por">R$ 197</div>
+          <div class="preco-label">pagamento único</div>
+        </div>
+      </div>
+      <a href="COLE_AQUI_O_LINK_DE_COMPRA" target="_blank" class="btn-comprar">
+        Quero o curso completo →
+      </a>
+      <div class="oferta-garantia">🔒 Garantia de 7 dias • Acesso imediato • Pagamento seguro</div>
+    </div>
+
   </div>
 </div>
 
 <div class="toast" id="toast">🎉 Cadastro realizado! Bem-vindo à aula.</div>
 
 <script>
+
+  // =====================================================
+  // CONFIGURAÇÃO DO BOTÃO DE COMPRA
+  // =====================================================
+  const TEMPO_MINUTOS = 0; // MODO TESTE — volte para 30 quando for ao ar // Altere aqui o tempo em minutos
+  const LINK_COMPRA   = 'COLE_AQUI_O_LINK_DE_COMPRA'; // Cole o link do produto
+  // =====================================================
+
+  let countdownInterval = null;
+
+  function iniciarContagem() {
+    document.querySelector('.btn-comprar').href = LINK_COMPRA;
+    setTimeout(function() {
+      var ofertaEl = document.getElementById('oferta-block');
+      ofertaEl.classList.add('visible');
+      ofertaEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, TEMPO_MINUTOS * 60 * 1000);
+  }
+
   // =====================================================
   // CONFIGURAÇÃO — cole aqui a URL do seu Apps Script
   // =====================================================
@@ -718,6 +836,7 @@
 
     document.getElementById('landing').style.display = 'none';
     document.getElementById('aula').classList.add('visible');
+    iniciarContagem();
     window.scrollTo(0, 0);
 
     const toast = document.getElementById('toast');
